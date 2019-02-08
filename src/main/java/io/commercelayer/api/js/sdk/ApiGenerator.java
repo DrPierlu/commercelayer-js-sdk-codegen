@@ -98,8 +98,19 @@ public class ApiGenerator {
 		
 		if (wr == null) return;
 		
-		apiLines.add(0, "// API functions automatically generated at " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()));
-		apiLines.add(1, StringUtils.EMPTY);
+		
+		String autoGenMsg = "// File automatically generated at " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date()) + " by commercelayer-js-sdk-codegen";
+		
+		if (apiLines.get(0).contains("automatically generated")) {
+			apiLines.remove(0);
+			apiLines.add(0, autoGenMsg);
+		}
+		else {
+			apiLines.add(0, autoGenMsg);
+			apiLines.add(1, StringUtils.EMPTY);
+			apiLines.add(2, StringUtils.EMPTY);
+		}
+		
 		
 		try (BufferedWriter br = new BufferedWriter(wr)) {
 			for (String line : apiLines) {
@@ -132,17 +143,22 @@ public class ApiGenerator {
 		int index = 0;
 		
 		for (String line : jsApi) {
+			
 			index++;
+			
 			if (line.contains("class CLApi")) apiIni = index;
+			
 			for (char c : line.toCharArray()) {
 				if (c == '{') brackets++;
 				else
 				if (c == '}') brackets--;
 			}
+			
 			if ((apiIni > 0) && (index != apiIni) && (brackets == 0)) {
 				apiEnd = index;
 				break;
 			}
+			
 		}
 		
 		
