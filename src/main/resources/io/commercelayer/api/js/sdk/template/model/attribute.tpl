@@ -1,0 +1,1 @@
+this.@ATTRIBUTE_SNAKE@ = fields.@ATTRIBUTE_SNAKE@;

@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 public class TemplateLoader {
 	
+	private static final String REPEATABLE_BLOCK_INI = "@-->";
+	private static final String PLACEHOLDER_DELIMITER = "@";
+	
 	private static final Logger logger = LoggerFactory.getLogger(TemplateLoader.class);
 	
 	private static final Map<String, List<String>> TEMPLATE_MAP = new HashMap<>();
@@ -44,7 +47,8 @@ public class TemplateLoader {
 	
 	private static List<String> loadTemplate(Type type, String name) {
 		
-		final String template = String.format("template/%s/%s.tpl", type.name(), name);
+		String template = String.format("template/%s/%s", type.name(), name);
+		if (!template.endsWith(".tpl")) template = template.concat(".tpl");
 		
 		logger.info("Loading template {} ...", template);
 		
@@ -68,8 +72,22 @@ public class TemplateLoader {
 	
 	
 	public static String replacePlaceholder(String line, String ph, String value) {
-		if (line.contains(ph)) return line.replaceAll(ph, value);
+		if (line.contains(ph)) return line.replaceAll(String.format("%1$s%2$s%1$s", PLACEHOLDER_DELIMITER, ph), value);
 		else return line;
+	}
+	
+	
+	
+	public static boolean isRepeatableBlock(String line) {
+		return (line != null) && line.trim().startsWith(REPEATABLE_BLOCK_INI);
+	}
+	
+	public static String getRepeatableBlockId(String line) {
+		return line.substring(line.indexOf(REPEATABLE_BLOCK_INI) + REPEATABLE_BLOCK_INI.length(), line.indexOf('[')).trim();
+	}
+	
+	public static String getRepeatableBlockTemplate(String line) {
+		return line.substring(line.indexOf('[')+1, line.indexOf(']'));
 	}
 
 }

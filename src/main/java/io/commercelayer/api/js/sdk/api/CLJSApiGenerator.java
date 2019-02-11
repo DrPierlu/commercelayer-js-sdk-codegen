@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,10 +32,10 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 
 		logger.info("Javascript API functions generation ...");
 
-		List<ApiResourceFunctions> apiFunctions = defineApiFunctions(schema);
+		List<ResourceApiFunctions> apiFunctions = defineApiFunctions(schema);
 
 		List<String> newApiLines = new LinkedList<>();
-		for (ApiResourceFunctions apiFun : apiFunctions) {
+		for (ResourceApiFunctions apiFun : apiFunctions) {
 			newApiLines.add(StringUtils.EMPTY);
 			newApiLines.addAll(buildResourceFunctions(apiFun));
 			newApiLines.add(StringUtils.EMPTY);
@@ -55,12 +54,11 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 	}
 
 	
-	private List<String> buildResourceFunctions(ApiResourceFunctions resFunctions) {
+	private List<String> buildResourceFunctions(ResourceApiFunctions resFunctions) {
 
 		List<String> lines = new ArrayList<>();
 
-		lines.add(String.format("\t// %s",
-				WordUtils.capitalize(resFunctions.getResourceSnakeSingular(true).replaceAll("_", " "))));
+		lines.add(String.format("\t// %s", resFunctions.getResourceTitle()));
 
 		for (String fun : resFunctions.getFunctions()) {
 
@@ -69,13 +67,10 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 			for (String line : tplLines) {
 				String filled = line;
 				if (!line.isEmpty()) {
-					filled = TemplateLoader.replacePlaceholder(filled, "@RESOURCE_CAMEL_CAP_PLURAL@",
-							resFunctions.getResourceCamelPlural(true));
-					filled = TemplateLoader.replacePlaceholder(filled, "@RESOURCE_CAMEL_CAP_SINGULAR@",
-							resFunctions.getResourceCamelSingular(true));
-					filled = TemplateLoader.replacePlaceholder(filled, "@RESOURCE_SNAKE_SINGULAR@",
-							resFunctions.getResourceSnakeSingular(false));
-					filled = TemplateLoader.replacePlaceholder(filled, "@RESOURCE_PATH@", resFunctions.getPath());
+					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_PLURAL", resFunctions.getResourceCamelPlural(true));
+					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_SINGULAR", resFunctions.getResourceCamelSingular(true));
+					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_SINGULAR", resFunctions.getResourceSnakeSingular(false));
+					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_PATH", resFunctions.getPath());
 				}
 				lines.add("\t" + filled);
 			}
@@ -107,14 +102,12 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 
 			index++;
 
-			if (line.contains("class CLApi"))
-				apiIni = index;
+			if (line.contains("class CLApi")) apiIni = index;
 
 			for (char c : line.toCharArray()) {
-				if (c == '{')
-					brackets++;
-				else if (c == '}')
-					brackets--;
+				if (c == '{') brackets++;
+				else
+				if (c == '}') brackets--;
 			}
 
 			if ((apiIni > 0) && (index != apiIni) && (brackets == 0)) {
@@ -141,15 +134,15 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 	}
 
 	
-	private List<ApiResourceFunctions> defineApiFunctions(ApiSchema schema) {
+	private List<ResourceApiFunctions> defineApiFunctions(ApiSchema schema) {
 
 		List<String> paths = ModelGeneratorUtils.getMainResourcePaths(schema);
 		Collections.sort(paths);
 
-		List<ApiResourceFunctions> functions = new ArrayList<>();
+		List<ResourceApiFunctions> functions = new ArrayList<>();
 
 		for (String path : paths)
-			functions.add(new ApiResourceFunctions(path));
+			functions.add(new ResourceApiFunctions(path));
 
 		return functions;
 

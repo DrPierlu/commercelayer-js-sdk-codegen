@@ -5,11 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 
 import io.commercelayer.api.codegen.model.generator.ModelGeneratorUtils;
 import io.commercelayer.api.util.CLInflector;
 
-public class ApiResourceFunctions {
+public class ResourceApiFunctions {
 
 	private static final String[] ALL_FUNCTIONS = { "list", "all", "retrieve", "create", "update", "delete" };
 
@@ -19,12 +20,13 @@ public class ApiResourceFunctions {
 	private String resourceCamelSingular;
 	private String resourceCamelPlural;
 	private String resourceSnakeSingular;
+	private String resourceTitle;
 
-	public ApiResourceFunctions(String path) {
+	public ResourceApiFunctions(String path) {
 		this(path, ALL_FUNCTIONS);
 	}
 
-	public ApiResourceFunctions(String path, String... functions) {
+	public ResourceApiFunctions(String path, String... functions) {
 		this.path = path;
 		this.functions.addAll(Arrays.asList(functions));
 		this.builtinNames(path);
@@ -43,6 +45,7 @@ public class ApiResourceFunctions {
 		this.resourceCamelPlural = ModelGeneratorUtils.toCamelCase(res);
 		this.resourceCamelSingular = CLInflector.getInstance().singularize(this.resourceCamelPlural);
 		this.resourceSnakeSingular = CLInflector.getInstance().singularize(res);
+		this.resourceTitle = WordUtils.capitalize(getResourceSnakeSingular(true).replaceAll("_", " "));
 	}
 
 	public String getResourceCamelSingular(boolean cap) {
@@ -57,6 +60,8 @@ public class ApiResourceFunctions {
 		return cap ? StringUtils.capitalize(resourceSnakeSingular) : resourceSnakeSingular;
 	}
 	
-	
+	public String getResourceTitle() {
+		return resourceTitle;
+	}
 
 }
