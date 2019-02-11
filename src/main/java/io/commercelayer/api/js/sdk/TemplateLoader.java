@@ -18,12 +18,23 @@ public class TemplateLoader {
 	
 	private static final Map<String, List<String>> TEMPLATE_MAP = new HashMap<>();
 	
-	public static List<String> getTemplate(String name) {
+	
+	public static enum Type { api, model }
+	
+	
+	private static String templateKey(Type type, String name) {
+		return String.format("%s/%s", type.name(), name);
+	}
+	
+	
+	public static List<String> getTemplate(Type type, String name) {
 		
-		List<String> tpl = TEMPLATE_MAP.get(name);
+		final String key = templateKey(type, name);
+		
+		List<String> tpl = TEMPLATE_MAP.get(key);
 		if (tpl == null) {
-			tpl = loadTemplate(name);
-			TEMPLATE_MAP.put(name, tpl);
+			tpl = loadTemplate(type, name);
+			TEMPLATE_MAP.put(key, tpl);
 		}
 		
 		return tpl;
@@ -31,10 +42,9 @@ public class TemplateLoader {
 	}
 	
 	
-	
-	private static List<String> loadTemplate(String name) {
+	private static List<String> loadTemplate(Type type, String name) {
 		
-		final String template = String.format("template/%s.tpl", name);
+		final String template = String.format("template/%s/%s.tpl", type.name(), name);
 		
 		logger.info("Loading template {} ...", template);
 		
@@ -56,7 +66,8 @@ public class TemplateLoader {
 		
 	}
 	
-	static String replacePlaceholder(String line, String ph, String value) {
+	
+	public static String replacePlaceholder(String line, String ph, String value) {
 		if (line.contains(ph)) return line.replaceAll(ph, value);
 		else return line;
 	}

@@ -1,4 +1,4 @@
-package io.commercelayer.api.js.sdk;
+package io.commercelayer.api.js.sdk.api;
 
 import java.util.Arrays;
 import java.util.LinkedList;
