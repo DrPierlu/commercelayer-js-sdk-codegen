@@ -17,9 +17,21 @@ public class CLJSGenerator {
 	private static final Logger logger = LoggerFactory.getLogger(CLJSGenerator.class);
 	
 	
-	public void generate() throws CodegenException {
+	void generate() {
+		generate(true, true);
+	}
+	
+	void generate(boolean api, boolean model) {
 		
-		ApiSchema schema = parseSchema();
+		logger.info("Reading Commerce Layer API Schema ...");
+		
+		ApiSchema schema;
+		try {
+			schema = parseSchema();
+		} catch (CodegenException ce) {
+			logger.error(ce.getMessage());
+			return;
+		}
 		
 		logger.info("Generating Commerce Layer Javascript SDK files ...");
 		
@@ -31,13 +43,17 @@ public class CLJSGenerator {
 		try {
 		
 			// API functions
-			CLJSFile apiFile = new CLJSApiGenerator().generate(schema);
-			jsFileWriter.write(apiFile);
+			if (api) {
+				CLJSFile apiFile = new CLJSApiGenerator().generate(schema);
+				jsFileWriter.write(apiFile);
+			}
 						
 			
 			// API Model
-			CLJSFile modelFile = new CLJSModelGenerator().generate(schema);
-			jsFileWriter.write(modelFile);
+			if (model) {
+				CLJSFile modelFile = new CLJSModelGenerator().generate(schema);
+				jsFileWriter.write(modelFile);
+			}
 			
 			
 			error = false;
@@ -75,11 +91,6 @@ public class CLJSGenerator {
 	@SuppressWarnings("unused")
 	private void printLines(List<String> lines) {
 		lines.forEach((line) -> logger.debug(line));
-	}
-	
-	
-	public static void main(String[] args) throws Exception {
-		new CLJSGenerator().generate();
 	}
 
 }

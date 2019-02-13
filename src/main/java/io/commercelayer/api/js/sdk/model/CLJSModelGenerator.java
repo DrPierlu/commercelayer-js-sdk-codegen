@@ -25,7 +25,8 @@ import io.commercelayer.api.codegen.schema.ApiSchema;
 import io.commercelayer.api.domain.OperationType;
 import io.commercelayer.api.js.sdk.CLJSFile;
 import io.commercelayer.api.js.sdk.CLJSFileGenerator;
-import io.commercelayer.api.js.sdk.Config;
+import io.commercelayer.api.js.sdk.CLJSParams;
+import io.commercelayer.api.js.sdk.ConfigLoader;
 import io.commercelayer.api.js.sdk.TemplateLoader;
 import io.commercelayer.api.js.sdk.TemplateLoader.Type;
 
@@ -33,6 +34,21 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 
 	private static final Logger logger = LoggerFactory.getLogger(CLJSModelGenerator.class);
 
+	private CLJSParams params = null;
+	
+	public CLJSModelGenerator() {
+		this(null);
+	}
+	
+	public CLJSModelGenerator(CLJSParams params) {
+		if (params == null) {
+			this.params = new CLJSParams()
+				.setJsSourceFile(ConfigLoader.getProperty("model.input.file.js"))
+				.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("model.output.file.overwrite")));
+		}
+		else this.params = params;
+	}
+	
 	@Override
 	public CLJSFile generate(ApiSchema schema) throws CodegenException {
 		
@@ -58,9 +74,8 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 		
 		newApiLines.addAll(exportLines);
 
-		String apiInputFile = Config.getProperty("model.input.file.js");
-		String apiOutputFile = Boolean.valueOf(Config.getProperty("model.output.file.overwrite"))?
-				apiInputFile : apiInputFile.replace(".js", ".gen.js");
+		final String apiInputFile = this.params.getJsSourceFile();
+		final String apiOutputFile = this.params.isOverwiteOutput()? apiInputFile : apiInputFile.replace(".js", ".gen.js");
 
 		List<String> newApiFileLines = replaceApiModels(apiInputFile, newApiLines);
 
@@ -150,9 +165,6 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 		return resources;
 		
 	}
-	
-	
-	
 	
 	
 	private List<String> buildResourceModel(ResourceModel resModel) {

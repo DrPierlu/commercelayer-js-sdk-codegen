@@ -52,7 +52,7 @@ public class TemplateLoader {
 		
 		logger.info("Loading template {} ...", template);
 		
-		InputStream is = TemplateLoader.class.getClassLoader().getResourceAsStream(Config.ROOT_PACKAGE + "/" + template);
+		InputStream is = TemplateLoader.class.getClassLoader().getResourceAsStream(ConfigLoader.ROOT_PACKAGE + "/" + template);
 		
 		List<String> tpl = new LinkedList<>();
 		
@@ -75,8 +75,6 @@ public class TemplateLoader {
 		if (line.contains(ph)) return line.replaceAll(String.format("%1$s%2$s%1$s", PLACEHOLDER_DELIMITER, ph), value);
 		else return line;
 	}
-	
-	
 	
 	public static boolean isRepeatableBlock(String line) {
 		return (line != null) && line.trim().startsWith(REPEATABLE_BLOCK_INI);
