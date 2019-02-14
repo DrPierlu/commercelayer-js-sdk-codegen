@@ -18,10 +18,12 @@ public class CLJSGenerator {
 	
 	
 	void generate() {
-		generate(true, true);
+		generate(true, true, true);
 	}
 	
-	void generate(boolean api, boolean model) {
+	void generate(boolean api, boolean model, boolean test) {
+		
+		logger.info("Options: [Api={}, Model={}, Test={}]", api, model, test);
 		
 		logger.info("Reading Commerce Layer API Schema ...");
 		
@@ -34,6 +36,7 @@ public class CLJSGenerator {
 		}
 		
 		logger.info("Generating Commerce Layer Javascript SDK files ...");
+		
 		
 		CLJSFileWriter jsFileWriter = new CLJSFileWriter();
 		
