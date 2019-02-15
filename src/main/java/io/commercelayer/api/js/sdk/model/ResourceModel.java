@@ -22,7 +22,7 @@ public class ResourceModel extends ResourceAware {
 		return type;
 	}
 
-	public List<String> getattributes() {
+	public List<String> getAttributes() {
 		return attributes;
 	}
 

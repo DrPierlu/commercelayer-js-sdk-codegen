@@ -180,14 +180,16 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 				String repId = TemplateLoader.getRepeatableBlockId(line);
 				String repTpl = TemplateLoader.getRepeatableBlockTemplate(line);
 				if ("ATTRIBUTES".equals(repId)) {
-					for (String l : TemplateLoader.getTemplate(Type.model, repTpl))
-						lines.add("\t\t" + TemplateLoader.replacePlaceholder(l, "ATTRIBUTE_SNAKE", resModel.getResourceSnakeSingular(false)));
+					for (String a : resModel.getAttributes())
+						for (String l : TemplateLoader.getTemplate(Type.model, repTpl))
+							lines.add("\t\t" + TemplateLoader.replacePlaceholder(l, "ATTRIBUTE_SNAKE", a));
 				}
 				else
 				if ("RELATIONSHIPS".equals(repId)) {
 					lines.add("\t// Relationships");
-					for (String l : TemplateLoader.getTemplate(Type.model, repTpl))
-						lines.add("\t" + TemplateLoader.replacePlaceholder(l, "RELATIONSHIP_SNAKE", resModel.getResourceSnakeSingular(false)));
+					for (String r : resModel.getRelationships())
+						for (String l : TemplateLoader.getTemplate(Type.model, repTpl))
+							lines.add("\t" + TemplateLoader.replacePlaceholder(l, "RELATIONSHIP_SNAKE", r));
 				}
 			}
 			else {
