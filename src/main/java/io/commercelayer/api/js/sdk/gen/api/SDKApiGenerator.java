@@ -1,4 +1,4 @@
-package io.commercelayer.api.js.sdk.api;
+package io.commercelayer.api.js.sdk.gen.api;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.commercelayer.api.codegen.CodegenException;
 import io.commercelayer.api.codegen.model.generator.ModelGeneratorUtils;
 import io.commercelayer.api.codegen.schema.ApiSchema;
-import io.commercelayer.api.js.sdk.common.SDKFileGenerator;
+import io.commercelayer.api.js.sdk.gen.common.SDKFileGenerator;
 import io.commercelayer.api.js.sdk.loader.ConfigLoader;
 import io.commercelayer.api.js.sdk.loader.TemplateLoader;
 import io.commercelayer.api.js.sdk.loader.TemplateLoader.Type;

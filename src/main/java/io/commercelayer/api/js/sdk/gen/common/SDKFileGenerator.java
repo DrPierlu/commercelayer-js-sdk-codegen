@@ -1,4 +1,4 @@
-package io.commercelayer.api.js.sdk.common;
+package io.commercelayer.api.js.sdk.gen.common;
 
 import java.io.File;
 import java.io.IOException;

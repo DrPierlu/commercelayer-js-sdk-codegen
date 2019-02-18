@@ -1,10 +1,10 @@
-package io.commercelayer.api.js.sdk.api;
+package io.commercelayer.api.js.sdk.gen.api;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.commercelayer.api.js.sdk.common.ResourceAware;
+import io.commercelayer.api.js.sdk.gen.common.ResourceAware;
 
 public class ResourceApiFunctions extends ResourceAware {
 

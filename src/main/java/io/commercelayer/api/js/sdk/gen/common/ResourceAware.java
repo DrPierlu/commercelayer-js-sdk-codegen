@@ -1,4 +1,4 @@
-package io.commercelayer.api.js.sdk.common;
+package io.commercelayer.api.js.sdk.gen.common;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;

@@ -1,9 +1,9 @@
-package io.commercelayer.api.js.sdk.model;
+package io.commercelayer.api.js.sdk.gen.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import io.commercelayer.api.js.sdk.common.ResourceAware;
+import io.commercelayer.api.js.sdk.gen.common.ResourceAware;
 import io.commercelayer.api.util.CLInflector;
 
 public class ResourceModel extends ResourceAware {
