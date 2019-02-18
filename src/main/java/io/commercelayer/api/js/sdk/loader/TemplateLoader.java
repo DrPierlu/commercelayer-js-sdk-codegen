@@ -1,4 +1,4 @@
-package io.commercelayer.api.js.sdk;
+package io.commercelayer.api.js.sdk.loader;
 
 import java.io.BufferedReader;
 import java.io.IOException;

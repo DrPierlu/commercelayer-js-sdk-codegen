@@ -1,8 +1,5 @@
 package io.commercelayer.api.js.sdk.model;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -10,10 +7,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.io.Files;
 
 import io.commercelayer.api.codegen.CodegenException;
 import io.commercelayer.api.codegen.model.generator.ModelGeneratorUtils;
@@ -23,26 +16,22 @@ import io.commercelayer.api.codegen.schema.ApiPath;
 import io.commercelayer.api.codegen.schema.ApiRelationship;
 import io.commercelayer.api.codegen.schema.ApiSchema;
 import io.commercelayer.api.domain.OperationType;
-import io.commercelayer.api.js.sdk.CLJSFile;
-import io.commercelayer.api.js.sdk.CLJSFileGenerator;
-import io.commercelayer.api.js.sdk.CLJSParams;
-import io.commercelayer.api.js.sdk.ConfigLoader;
-import io.commercelayer.api.js.sdk.TemplateLoader;
-import io.commercelayer.api.js.sdk.TemplateLoader.Type;
+import io.commercelayer.api.js.sdk.common.SDKFileGenerator;
+import io.commercelayer.api.js.sdk.loader.ConfigLoader;
+import io.commercelayer.api.js.sdk.loader.TemplateLoader;
+import io.commercelayer.api.js.sdk.loader.TemplateLoader.Type;
+import io.commercelayer.api.js.sdk.src.JSCodeBlock;
+import io.commercelayer.api.js.sdk.src.JSCodeFile;
 
-public class CLJSModelGenerator implements CLJSFileGenerator {
+public class SDKModelGenerator extends SDKFileGenerator {
 
-	private static final Logger logger = LoggerFactory.getLogger(CLJSModelGenerator.class);
-
-	private CLJSParams params = null;
-	
-	public CLJSModelGenerator() {
+	public SDKModelGenerator() {
 		this(null);
 	}
 	
-	public CLJSModelGenerator(CLJSParams params) {
+	public SDKModelGenerator(Params params) {
 		if (params == null) {
-			this.params = new CLJSParams()
+			this.params = new Params()
 				.setJsSourceFile(ConfigLoader.getProperty("model.input.file.js"))
 				.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("model.output.file.overwrite")));
 		}
@@ -50,7 +39,7 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 	}
 	
 	@Override
-	public CLJSFile generate(ApiSchema schema) throws CodegenException {
+	public JSCodeFile generate(ApiSchema schema) throws CodegenException {
 		
 		logger.info("Javascript API models generation ...");
 		
@@ -82,7 +71,7 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 		logger.info("Javascript API models generated.");
 		
 		
-		return new CLJSFile(apiOutputFile, newApiFileLines);
+		return new JSCodeFile(apiOutputFile, newApiFileLines);
 
 	}
 	
@@ -213,48 +202,20 @@ public class CLJSModelGenerator implements CLJSFileGenerator {
 	
 	private List<String> replaceApiModels(String modelFilePath, List<String> newLines) throws CodegenException {
 
-		List<String> jsModel;
-		try {
-			jsModel = Files.readLines(new File(modelFilePath), Charset.forName("UTF-8"));
-		} catch (IOException ioe) {
-			throw new CodegenException("Error reading file " + modelFilePath);
-		}
+		List<String> jsModel = readLines(modelFilePath);
 
-		int resIni = 0;
-		int resEnd = 0;
-		int index = 0;
-		int brackets = 0;
-
-		for (String line : jsModel) {
-
-			index++;
-
-			if (line.contains("class Resource")) resIni = index;
-
-			for (char c : line.toCharArray()) {
-				if (c == '{') brackets++;
-				else
-				if (c == '}') brackets--;
-			}
-
-			if ((resIni > 0) && (index != resIni) && (brackets == 0)) {
-				resEnd = index;
-				break;
-			}
-
-		}
-		
-		
-
-		List<String> resLines = jsModel.subList(resIni - 1, resEnd);
+		List<String> resLines = findBlock("class Resource", jsModel).getLines();
 
 		List<String> newApiLines = new LinkedList<>();
+		
+		JSCodeBlock expBlock = findBlock("module.exports", jsModel);
 
 		newApiLines.add("// Basic Abstract Resource");
 		newApiLines.addAll(resLines);
 		newApiLines.add(StringUtils.EMPTY);
 		newApiLines.add(StringUtils.EMPTY);
 		newApiLines.addAll(newLines);
+		newApiLines.addAll(jsModel.subList(expBlock.getLineEnd(), jsModel.size()));
 		
 
 		return newApiLines;

@@ -1,42 +1,31 @@
 package io.commercelayer.api.js.sdk.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.io.Files;
 
 import io.commercelayer.api.codegen.CodegenException;
 import io.commercelayer.api.codegen.model.generator.ModelGeneratorUtils;
 import io.commercelayer.api.codegen.schema.ApiSchema;
-import io.commercelayer.api.js.sdk.CLJSFile;
-import io.commercelayer.api.js.sdk.CLJSFileGenerator;
-import io.commercelayer.api.js.sdk.CLJSParams;
-import io.commercelayer.api.js.sdk.ConfigLoader;
-import io.commercelayer.api.js.sdk.TemplateLoader;
-import io.commercelayer.api.js.sdk.TemplateLoader.Type;
+import io.commercelayer.api.js.sdk.common.SDKFileGenerator;
+import io.commercelayer.api.js.sdk.loader.ConfigLoader;
+import io.commercelayer.api.js.sdk.loader.TemplateLoader;
+import io.commercelayer.api.js.sdk.loader.TemplateLoader.Type;
+import io.commercelayer.api.js.sdk.src.JSCodeBlock;
+import io.commercelayer.api.js.sdk.src.JSCodeFile;
 
-public class CLJSApiGenerator implements CLJSFileGenerator {
-
-	private static final Logger logger = LoggerFactory.getLogger(CLJSApiGenerator.class);
+public class SDKApiGenerator extends SDKFileGenerator {
 	
-	private CLJSParams params = null;
-	
-	public CLJSApiGenerator() {
+	public SDKApiGenerator() {
 		this(null);
 	}
 	
-	public CLJSApiGenerator(CLJSParams params) {
+	public SDKApiGenerator(Params params) {
 		if (params == null) {
-			this.params = new CLJSParams()
+			this.params = new Params()
 				.setJsSourceFile(ConfigLoader.getProperty("api.input.file.js"))
 				.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("api.output.file.overwrite")));
 		}
@@ -44,7 +33,7 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 	}
 
 	@Override
-	public CLJSFile generate(ApiSchema schema) throws CodegenException {
+	public JSCodeFile generate(ApiSchema schema) throws CodegenException {
 
 		logger.info("Javascript API functions generation ...");
 
@@ -64,7 +53,7 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 
 		logger.info("Javascript API functions generated.");
 		
-		return new CLJSFile(apiOutputFile, newApiFileLines);
+		return new JSCodeFile(apiOutputFile, newApiFileLines);
 
 	}
 
@@ -101,40 +90,13 @@ public class CLJSApiGenerator implements CLJSFileGenerator {
 	
 	private List<String> replaceApiFunctions(String apiFilePath, List<String> newLines) throws CodegenException {
 
-		List<String> jsApi;
-		try {
-			jsApi = Files.readLines(new File(apiFilePath), Charset.forName("UTF-8"));
-		} catch (IOException ioe) {
-			throw new CodegenException("Error reading file " + apiFilePath);
-		}
+		List<String> jsApi = readLines(apiFilePath);
 
-		int apiIni = 0;
-		int apiEnd = 0;
-		int brackets = 0;
-		int index = 0;
-
-		for (String line : jsApi) {
-
-			index++;
-
-			if (line.contains("class CLApi")) apiIni = index;
-
-			for (char c : line.toCharArray()) {
-				if (c == '{') brackets++;
-				else
-				if (c == '}') brackets--;
-			}
-
-			if ((apiIni > 0) && (index != apiIni) && (brackets == 0)) {
-				apiEnd = index;
-				break;
-			}
-
-		}
-
-		List<String> preLines = jsApi.subList(0, apiIni - 1);
-		List<String> apiLines = jsApi.subList(apiIni - 1, apiEnd);
-		List<String> postLines = jsApi.subList(apiEnd, jsApi.size());
+		JSCodeBlock apiBlock = findBlock("class CLApi", jsApi);
+		
+		List<String> preLines = jsApi.subList(0, apiBlock.getLineIni() - 1);
+		List<String> apiLines = apiBlock.getLines();
+		List<String> postLines = jsApi.subList(apiBlock.getLineEnd(), jsApi.size());
 
 		List<String> newApiLines = new LinkedList<>();
 

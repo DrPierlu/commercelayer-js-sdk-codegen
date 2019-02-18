@@ -1,4 +1,4 @@
-package io.commercelayer.api.js.sdk;
+package io.commercelayer.api.js.sdk.src;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -17,12 +17,12 @@ import com.google.common.io.Files;
 import io.commercelayer.api.codegen.CodegenException;
 import io.commercelayer.api.util.LogUtils;
 
-public class CLJSFileWriter {
+public class JSFileWriter {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CLJSFileWriter.class);
+	private static final Logger logger = LoggerFactory.getLogger(JSFileWriter.class);
 	
 
-	public void write(CLJSFile jsFile) throws CodegenException {
+	public void write(JSCodeFile jsFile) throws CodegenException {
 
 		if ((jsFile == null) || (jsFile.getPath() == null)) throw new CodegenException("No Javascript file to write");
 		

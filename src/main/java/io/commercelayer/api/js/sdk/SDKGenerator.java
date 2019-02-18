@@ -8,13 +8,15 @@ import org.slf4j.LoggerFactory;
 import io.commercelayer.api.codegen.CodegenException;
 import io.commercelayer.api.codegen.schema.ApiSchema;
 import io.commercelayer.api.codegen.schema.parser.SchemaParserExecutor;
-import io.commercelayer.api.js.sdk.api.CLJSApiGenerator;
-import io.commercelayer.api.js.sdk.model.CLJSModelGenerator;
+import io.commercelayer.api.js.sdk.api.SDKApiGenerator;
+import io.commercelayer.api.js.sdk.model.SDKModelGenerator;
+import io.commercelayer.api.js.sdk.src.JSCodeFile;
+import io.commercelayer.api.js.sdk.src.JSFileWriter;
 import io.commercelayer.api.util.LogUtils;
 
-public class CLJSGenerator {
+public class SDKGenerator {
 	
-	private static final Logger logger = LoggerFactory.getLogger(CLJSGenerator.class);
+	private static final Logger logger = LoggerFactory.getLogger(SDKGenerator.class);
 	
 	
 	void generate() {
@@ -38,7 +40,7 @@ public class CLJSGenerator {
 		logger.info("Generating Commerce Layer Javascript SDK files ...");
 		
 		
-		CLJSFileWriter jsFileWriter = new CLJSFileWriter();
+		JSFileWriter jsFileWriter = new JSFileWriter();
 		
 		
 		boolean error = true;
@@ -47,14 +49,14 @@ public class CLJSGenerator {
 		
 			// API functions
 			if (api) {
-				CLJSFile apiFile = new CLJSApiGenerator().generate(schema);
+				JSCodeFile apiFile = new SDKApiGenerator().generate(schema);
 				jsFileWriter.write(apiFile);
 			}
 						
 			
 			// API Model
 			if (model) {
-				CLJSFile modelFile = new CLJSModelGenerator().generate(schema);
+				JSCodeFile modelFile = new SDKModelGenerator().generate(schema);
 				jsFileWriter.write(modelFile);
 			}
 			

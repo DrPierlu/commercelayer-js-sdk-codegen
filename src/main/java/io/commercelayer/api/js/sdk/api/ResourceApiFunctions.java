@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.commercelayer.api.js.sdk.ResourceAware;
+import io.commercelayer.api.js.sdk.common.ResourceAware;
 
 public class ResourceApiFunctions extends ResourceAware {
 

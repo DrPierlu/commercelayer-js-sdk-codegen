@@ -3,7 +3,7 @@ package io.commercelayer.api.js.sdk.model;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.commercelayer.api.js.sdk.ResourceAware;
+import io.commercelayer.api.js.sdk.common.ResourceAware;
 import io.commercelayer.api.util.CLInflector;
 
 public class ResourceModel extends ResourceAware {

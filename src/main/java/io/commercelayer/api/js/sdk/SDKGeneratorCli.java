@@ -1,6 +1,6 @@
 package io.commercelayer.api.js.sdk;
 
-public class CLJSCli {
+public class SDKGeneratorCli {
 
 	public static void main(String[] args) {
 		
@@ -30,7 +30,7 @@ public class CLJSCli {
 			
 		}
 		
-		new CLJSGenerator().generate(api, model, test);
+		new SDKGenerator().generate(api, model, test);
 	}
 
 }

@@ -1,18 +1,18 @@
-package io.commercelayer.api.js.sdk;
+package io.commercelayer.api.js.sdk.src;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class CLJSFile {
+public class JSCodeFile {
 	
 	private String path;
 	private List<String> sourceLines;
 	
-	public CLJSFile(String path) {
+	public JSCodeFile(String path) {
 		this.path = path;
 	}
 	
-	public CLJSFile(String path, List<String> sourceLines) {
+	public JSCodeFile(String path, List<String> sourceLines) {
 		this(path);
 		this.sourceLines = sourceLines;
 	}
