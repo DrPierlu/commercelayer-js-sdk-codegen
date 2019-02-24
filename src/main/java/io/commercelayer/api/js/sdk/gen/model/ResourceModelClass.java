@@ -6,14 +6,14 @@ import java.util.List;
 import io.commercelayer.api.js.sdk.gen.common.ResourceAware;
 import io.commercelayer.api.util.CLInflector;
 
-public class ResourceModel extends ResourceAware {
+public class ResourceModelClass extends ResourceAware {
 	
 	private String type;
 	private List<String> attributes = new LinkedList<>();
 	private List<String> relationships = new LinkedList<>();
 
 	
-	public ResourceModel(String type) {
+	public ResourceModelClass(String type) {
 		super(CLInflector.getInstance().singularize(type));
 		this.type = type;
 	}
@@ -26,12 +26,12 @@ public class ResourceModel extends ResourceAware {
 		return attributes;
 	}
 
-	public ResourceModel addAttributes(List<String> attributes) {
+	public ResourceModelClass addAttributes(List<String> attributes) {
 		this.attributes.addAll(attributes);
 		return this;
 	}
 	
-	public ResourceModel addAttribute(String attribute) {
+	public ResourceModelClass addAttribute(String attribute) {
 		this.attributes.add(attribute);
 		return this;
 	}
@@ -40,12 +40,12 @@ public class ResourceModel extends ResourceAware {
 		return relationships;
 	}
 
-	public ResourceModel addRelationships(List<String> relationships) {
+	public ResourceModelClass addRelationships(List<String> relationships) {
 		this.relationships.addAll(relationships);
 		return this;
 	}
 	
-	public ResourceModel addRelationship(String relationship) {
+	public ResourceModelClass addRelationship(String relationship) {
 		this.relationships.add(relationship);
 		return this;
 	}

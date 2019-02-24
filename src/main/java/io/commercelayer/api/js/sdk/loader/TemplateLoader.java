@@ -80,12 +80,16 @@ public class TemplateLoader {
 		return (line != null) && line.trim().startsWith(REPEATABLE_BLOCK_INI);
 	}
 	
+	public static boolean isInnerTemplateBlock(String line) {
+		return (line != null) && line.trim().startsWith(PLACEHOLDER_DELIMITER.concat("["));
+	}
+	
 	public static String getRepeatableBlockId(String line) {
 		return line.substring(line.indexOf(REPEATABLE_BLOCK_INI) + REPEATABLE_BLOCK_INI.length(), line.indexOf('[')).trim();
 	}
 	
-	public static String getRepeatableBlockTemplate(String line) {
+	public static String getSubTemplateName(String line) {
 		return line.substring(line.indexOf('[')+1, line.indexOf(']'));
 	}
-
+	
 }

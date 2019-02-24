@@ -43,42 +43,42 @@ public class SDKModelGenerator extends SDKFileGenerator {
 		
 		logger.info("Javascript API models generation ...");
 		
-		List<ResourceModel> resources = defineClassModels(schema);
+		List<ResourceModelClass> resources = defineClassModels(schema);
 		
 		List<String> exportLines = new LinkedList<>();
 		
 		exportLines.add(StringUtils.EMPTY);
 		exportLines.add("module.exports = {");
 		
-		List<String> newApiLines = new LinkedList<>();
-		for (ResourceModel res : resources) {
-			newApiLines.add(StringUtils.EMPTY);
-			newApiLines.addAll(buildResourceModel(res));
-			newApiLines.add(StringUtils.EMPTY);
-			newApiLines.add(StringUtils.EMPTY);
+		List<String> newModelLines = new LinkedList<>();
+		for (ResourceModelClass res : resources) {
+			newModelLines.add(StringUtils.EMPTY);
+			newModelLines.addAll(buildResourceModel(res));
+			newModelLines.add(StringUtils.EMPTY);
+			newModelLines.add(StringUtils.EMPTY);
 			exportLines.add("\t" + res.getResourceCamelSingular(true) + ",");
 		}
 		
 		exportLines.add("}");
 		
-		newApiLines.addAll(exportLines);
+		newModelLines.addAll(exportLines);
 
-		final String apiInputFile = this.params.getJsSourceFile();
-		final String apiOutputFile = this.params.isOverwiteOutput()? apiInputFile : apiInputFile.replace(".js", ".gen.js");
+		final String modelInputFile = this.params.getJsSourceFile();
+		final String modelOutputFile = this.params.isOverwiteOutput()? modelInputFile : modelInputFile.replace(".js", ".gen.js");
 
-		List<String> newApiFileLines = replaceApiModels(apiInputFile, newApiLines);
+		List<String> newModelFileLines = replaceApiModels(modelInputFile, newModelLines);
 
 		logger.info("Javascript API models generated.");
 		
 		
-		return new JSCodeFile(apiOutputFile, newApiFileLines);
+		return new JSCodeFile(modelOutputFile, newModelFileLines);
 
 	}
 	
 	
-	private List<ResourceModel> defineClassModels(ApiSchema schema) {
+	private List<ResourceModelClass> defineClassModels(ApiSchema schema) {
 		
-		List<ResourceModel> resources = new LinkedList<>();
+		List<ResourceModelClass> resources = new LinkedList<>();
 
 		List<String> mainPaths = ModelGeneratorUtils.getMainResourcePaths(schema);
 		Collections.sort(mainPaths);
@@ -86,7 +86,7 @@ public class SDKModelGenerator extends SDKFileGenerator {
 		logger.info("Analizing main paths ...");
 		for (String mainRes : mainPaths) {
 			
-			ResourceModel resource = new ResourceModel(mainRes.substring(1));
+			ResourceModelClass resource = new ResourceModelClass(mainRes.substring(1));
 
 			for (ApiPath path : schema.getPaths()) {
 
@@ -156,7 +156,7 @@ public class SDKModelGenerator extends SDKFileGenerator {
 	}
 	
 	
-	private List<String> buildResourceModel(ResourceModel resModel) {
+	private List<String> buildResourceModel(ResourceModelClass resModel) {
 
 		List<String> lines = new ArrayList<>();
 				
@@ -167,7 +167,7 @@ public class SDKModelGenerator extends SDKFileGenerator {
 			
 			if (TemplateLoader.isRepeatableBlock(line)) {
 				String repId = TemplateLoader.getRepeatableBlockId(line);
-				String repTpl = TemplateLoader.getRepeatableBlockTemplate(line);
+				String repTpl = TemplateLoader.getSubTemplateName(line);
 				if ("ATTRIBUTES".equals(repId)) {
 					for (String a : resModel.getAttributes())
 						for (String l : TemplateLoader.getTemplate(Type.model, repTpl))
