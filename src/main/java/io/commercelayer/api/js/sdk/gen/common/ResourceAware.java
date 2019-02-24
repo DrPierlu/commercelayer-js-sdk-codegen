@@ -1,9 +1,11 @@
 package io.commercelayer.api.js.sdk.gen.common;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 
 import io.commercelayer.api.codegen.model.generator.ModelGeneratorUtils;
+import io.commercelayer.api.js.sdk.loader.ConfigLoader;
 import io.commercelayer.api.util.CLInflector;
 
 public abstract class ResourceAware {
@@ -21,10 +23,18 @@ public abstract class ResourceAware {
 	}
 
 	private void builtinNames(String name) {
+		
 		this.resourceCamelPlural = ModelGeneratorUtils.toCamelCase(name);
 		this.resourceCamelSingular = CLInflector.getInstance().singularize(this.resourceCamelPlural);
 		this.resourceSnakeSingular = CLInflector.getInstance().singularize(name);
 		this.resourceTitle = WordUtils.capitalize(getResourceSnakeSingular(true).replaceAll("_", " "));
+		
+		this.resourceSnakeSingular = checkReservedWords(this.resourceSnakeSingular);
+		
+	}
+	
+	private String checkReservedWords(String s) {
+		return ArrayUtils.contains(ConfigLoader.getReservedWords(), s)? s.concat("_") : s;
 	}
 	
 	public String getName() {

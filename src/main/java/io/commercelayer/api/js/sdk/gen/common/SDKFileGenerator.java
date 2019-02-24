@@ -14,6 +14,7 @@ import io.commercelayer.api.codegen.CodegenException;
 import io.commercelayer.api.codegen.schema.ApiSchema;
 import io.commercelayer.api.js.sdk.src.JSCodeBlock;
 import io.commercelayer.api.js.sdk.src.JSCodeFile;
+import io.commercelayer.api.util.LogUtils;
 
 public abstract class SDKFileGenerator {
 	
@@ -30,6 +31,7 @@ public abstract class SDKFileGenerator {
 		try {
 			return Files.readLines(new File(filePath), Charset.forName("UTF-8"));
 		} catch (IOException ioe) {
+			logger.error(LogUtils.printStackTrace(ioe));
 			throw new CodegenException("Error reading file " + filePath);
 		}
 	}
