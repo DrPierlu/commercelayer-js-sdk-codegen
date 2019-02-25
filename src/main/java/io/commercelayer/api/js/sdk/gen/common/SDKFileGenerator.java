@@ -17,16 +17,17 @@ import io.commercelayer.api.js.sdk.src.JSCodeFile;
 import io.commercelayer.api.util.LogUtils;
 
 public abstract class SDKFileGenerator {
-	
+
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
-	
 
 	protected Params params = null;
-	
+
+	public SDKFileGenerator(Params params) {
+		this.params = params;
+	}
 
 	public abstract JSCodeFile generate(ApiSchema schema) throws CodegenException;
-	
-	
+
 	protected List<String> readLines(String filePath) throws CodegenException {
 		try {
 			return Files.readLines(new File(filePath), Charset.forName("UTF-8"));
@@ -37,7 +38,7 @@ public abstract class SDKFileGenerator {
 	}
 
 	protected JSCodeBlock findBlock(String blockId, List<String> lines) {
-		
+
 		int blockIni = 0;
 		int blockEnd = 0;
 		int index = 0;
@@ -47,12 +48,14 @@ public abstract class SDKFileGenerator {
 
 			index++;
 
-			if (line.trim().startsWith(blockId)) blockIni = index;
+			if (line.trim().startsWith(blockId))
+				blockIni = index;
 
 			for (char c : line.toCharArray()) {
-				if (c == '{') brackets++;
-				else
-				if (c == '}') brackets--;
+				if (c == '{')
+					brackets++;
+				else if (c == '}')
+					brackets--;
 			}
 
 			if ((blockIni > 0) && (index != blockIni) && (brackets == 0)) {
@@ -61,18 +64,27 @@ public abstract class SDKFileGenerator {
 			}
 
 		}
-		
+
 		List<String> blockLines = lines.subList(blockIni - 1, blockEnd);
-		
+
 		return new JSCodeBlock(blockIni, blockEnd, blockLines);
-		
+
 	}
-	
-	
+
 	public static final class Params {
 
+		private String jsSourceDir;
 		private String jsSourceFile;
 		private boolean overwiteOutput;
+
+		public String getJsSourceDir() {
+			return jsSourceDir;
+		}
+
+		public Params setJsSourceDir(String jsSourceDir) {
+			this.jsSourceDir = jsSourceDir;
+			return this;
+		}
 
 		public String getJsSourceFile() {
 			return jsSourceFile;

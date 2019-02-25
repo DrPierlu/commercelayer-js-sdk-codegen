@@ -30,12 +30,10 @@ public class SDKModelGenerator extends SDKFileGenerator {
 	}
 	
 	public SDKModelGenerator(Params params) {
-		if (params == null) {
-			this.params = new Params()
-				.setJsSourceFile(ConfigLoader.getProperty("model.input.file.js"))
-				.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("model.output.file.overwrite")));
-		}
-		else this.params = params;
+		super((params != null)? params : new Params()
+			.setJsSourceFile(ConfigLoader.getProperty("model.input.file.js"))
+			.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("model.output.file.overwrite")))
+		);
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import io.commercelayer.api.codegen.schema.ApiSchema;
 import io.commercelayer.api.codegen.schema.parser.SchemaParserExecutor;
 import io.commercelayer.api.js.sdk.gen.api.SDKApiGenerator;
 import io.commercelayer.api.js.sdk.gen.model.SDKModelGenerator;
+import io.commercelayer.api.js.sdk.gen.test.SDKTestGenerator;
 import io.commercelayer.api.js.sdk.src.JSCodeFile;
 import io.commercelayer.api.js.sdk.src.JSFileWriter;
 import io.commercelayer.api.util.LogUtils;
@@ -58,6 +59,14 @@ public class SDKGenerator {
 			if (model) {
 				JSCodeFile modelFile = new SDKModelGenerator().generate(schema);
 				jsFileWriter.write(modelFile);
+			}
+			
+			
+			// API test specs
+			if (test) {
+				for (JSCodeFile testFile : new SDKTestGenerator().generate(schema)) {
+					jsFileWriter.write(testFile);
+				}
 			}
 			
 			

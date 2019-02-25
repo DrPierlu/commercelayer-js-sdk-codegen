@@ -22,7 +22,7 @@ public class TemplateLoader {
 	private static final Map<String, List<String>> TEMPLATE_MAP = new HashMap<>();
 	
 	
-	public static enum Type { api, model }
+	public static enum Type { api, model, test }
 	
 	
 	private static String templateKey(Type type, String name) {
@@ -31,6 +31,8 @@ public class TemplateLoader {
 	
 	
 	public static List<String> getTemplate(Type type, String name) {
+		
+		if (!name.endsWith(".tpl")) name = name.concat(".tpl");
 		
 		final String key = templateKey(type, name);
 		

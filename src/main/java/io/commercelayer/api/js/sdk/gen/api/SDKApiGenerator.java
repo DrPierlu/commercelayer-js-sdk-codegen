@@ -24,12 +24,10 @@ public class SDKApiGenerator extends SDKFileGenerator {
 	}
 	
 	public SDKApiGenerator(Params params) {
-		if (params == null) {
-			this.params = new Params()
-				.setJsSourceFile(ConfigLoader.getProperty("api.input.file.js"))
-				.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("api.output.file.overwrite")));
-		}
-		else this.params = params;
+		super((params != null)? params : new Params()
+			.setJsSourceFile(ConfigLoader.getProperty("api.input.file.js"))
+			.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("api.output.file.overwrite")))
+		);
 	}
 
 	@Override
