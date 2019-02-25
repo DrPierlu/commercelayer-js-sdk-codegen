@@ -1,5 +1,6 @@
 package io.commercelayer.api.js.sdk.gen.test;
 
+import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class SDKSpecGenerator extends SDKFileGenerator {
 	public SDKSpecGenerator(ResourceTestSpec resSpec, Params params) {
 		super((params != null)? params : new Params()
 			.setJsSourceDir(ConfigLoader.getProperty("test.input.dir"))
+			.setOverwiteOutput(Boolean.valueOf(ConfigLoader.getProperty("test.output.file.overwrite")))
 		);
 		this.resSpec = resSpec;
 	}
@@ -37,6 +39,10 @@ public class SDKSpecGenerator extends SDKFileGenerator {
 		
 		String jsSpecFilePath = this.params.getJsSourceDir();
 		if (!jsSpecFilePath.endsWith("/")) jsSpecFilePath = jsSpecFilePath.concat("/");
+		
+		if (!this.params.isOverwiteOutput()) jsSpecFilePath = jsSpecFilePath.concat("gen/");
+		new File(jsSpecFilePath).mkdirs();
+		
 		jsSpecFilePath = jsSpecFilePath.concat(this.resSpec.getResource() + ".spec.js");
 		
 		JSCodeFile jsSpecFile = new JSCodeFile(jsSpecFilePath);
@@ -71,6 +77,9 @@ public class SDKSpecGenerator extends SDKFileGenerator {
 				}
 				
 			}
+			else
+			if (TemplateLoader.lineContainsPlaceholder(line, "RESOURCE_CAMEL_CAP_PLURAL"))
+				lines.add(TemplateLoader.replacePlaceholder(line, "RESOURCE_CAMEL_CAP_PLURAL", spec.getResourceCamelPlural(true)));
 			else lines.add(line);
 		}
 		

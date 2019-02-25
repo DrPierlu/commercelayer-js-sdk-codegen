@@ -74,8 +74,20 @@ public class TemplateLoader {
 	
 	
 	public static String replacePlaceholder(String line, String ph, String value) {
-		if (line.contains(ph)) return line.replaceAll(String.format("%1$s%2$s%1$s", PLACEHOLDER_DELIMITER, ph), value);
+		if (lineContainsPlaceholder(line, ph)) return line.replaceAll(String.format("%1$s%2$s%1$s", PLACEHOLDER_DELIMITER, ph), value);
 		else return line;
+	}
+	
+	public static boolean lineContainsPlaceholder(String line, String ph) {
+		return line.contains(PLACEHOLDER_DELIMITER + ph + PLACEHOLDER_DELIMITER);
+	}
+	
+	public static boolean lineContainsPlaceholder(String line) {
+		int idx1 = line.indexOf(PLACEHOLDER_DELIMITER);
+		if (idx1 < 0) return false;
+		int idx2 = line.lastIndexOf(PLACEHOLDER_DELIMITER);
+		if (idx2 < 0) return false;
+		return (idx2 > idx1);
 	}
 	
 	public static boolean isRepeatableBlock(String line) {

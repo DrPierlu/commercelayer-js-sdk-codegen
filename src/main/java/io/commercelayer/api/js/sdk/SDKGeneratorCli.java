@@ -6,7 +6,7 @@ public class SDKGeneratorCli {
 		
 		boolean api = true;
 		boolean model = true;
-		boolean test = false;
+		boolean test = true;
 		
 		if (args.length > 0) {
 			
