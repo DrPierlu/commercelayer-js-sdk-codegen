@@ -74,15 +74,15 @@ public class TemplateLoader {
 	
 	
 	public static String replacePlaceholder(String line, String ph, String value) {
-		if (lineContainsPlaceholder(line, ph)) return line.replaceAll(String.format("%1$s%2$s%1$s", PLACEHOLDER_DELIMITER, ph), value);
+		if (containsPlaceholder(line, ph)) return line.replaceAll(String.format("%1$s%2$s%1$s", PLACEHOLDER_DELIMITER, ph), value);
 		else return line;
 	}
 	
-	public static boolean lineContainsPlaceholder(String line, String ph) {
+	public static boolean containsPlaceholder(String line, String ph) {
 		return line.contains(PLACEHOLDER_DELIMITER + ph + PLACEHOLDER_DELIMITER);
 	}
 	
-	public static boolean lineContainsPlaceholder(String line) {
+	public static boolean containsPlaceholder(String line) {
 		int idx1 = line.indexOf(PLACEHOLDER_DELIMITER);
 		if (idx1 < 0) return false;
 		int idx2 = line.lastIndexOf(PLACEHOLDER_DELIMITER);

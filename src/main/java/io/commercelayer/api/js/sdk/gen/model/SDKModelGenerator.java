@@ -185,7 +185,7 @@ public class SDKModelGenerator extends SDKFileGenerator {
 					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_TITLE_SINGULAR", resModel.getResourceTitle());
 					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_TYPE", resModel.getType());
 					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_SINGULAR", resModel.getResourceCamelSingular(true));
-					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_SINGULAR", resModel.getResourceSnakeSingular(false));
+					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_SINGULAR", resModel.getResourceSnakeSingular());
 				}
 				lines.add(filled);
 			}

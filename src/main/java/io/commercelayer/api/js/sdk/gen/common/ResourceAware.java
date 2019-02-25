@@ -15,6 +15,7 @@ public abstract class ResourceAware {
 	private String resourceCamelSingular;
 	private String resourceCamelPlural;
 	private String resourceSnakeSingular;
+	private String resourceSnakePlural;
 	private String resourceTitle;
 
 	public ResourceAware(String name) {
@@ -27,7 +28,8 @@ public abstract class ResourceAware {
 		this.resourceCamelPlural = ModelGeneratorUtils.toCamelCase(name);
 		this.resourceCamelSingular = CLInflector.getInstance().singularize(this.resourceCamelPlural);
 		this.resourceSnakeSingular = CLInflector.getInstance().singularize(name);
-		this.resourceTitle = WordUtils.capitalize(getResourceSnakeSingular(true).replaceAll("_", " "));
+		this.resourceSnakePlural = name;
+		this.resourceTitle = WordUtils.capitalize(getResourceSnakeSingular().replaceAll("_", " "));
 		
 		this.resourceSnakeSingular = checkReservedWords(this.resourceSnakeSingular);
 		
@@ -49,8 +51,12 @@ public abstract class ResourceAware {
 		return cap ? StringUtils.capitalize(resourceCamelPlural) : resourceCamelPlural;
 	}
 
-	public String getResourceSnakeSingular(boolean cap) {
-		return cap ? StringUtils.capitalize(resourceSnakeSingular) : resourceSnakeSingular;
+	public String getResourceSnakeSingular() {
+		return this.resourceSnakeSingular;
+	}
+	
+	public String getResourceSnakePlural() {
+		return this.resourceSnakePlural;
 	}
 
 	public String getResourceTitle() {

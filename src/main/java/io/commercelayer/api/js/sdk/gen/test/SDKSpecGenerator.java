@@ -71,14 +71,14 @@ public class SDKSpecGenerator extends SDKFileGenerator {
 					if (!l.isEmpty()) {
 						filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_PLURAL", spec.getResourceCamelPlural(true));
 						filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_SINGULAR", spec.getResourceCamelSingular(true));
-//						filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_SINGULAR", spec.getResourceSnakeSingular(false));
+						filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_PLURAL", spec.getResourceSnakeSingular());
 					}
 					lines.add("\t".concat(filled));
 				}
 				
 			}
 			else
-			if (TemplateLoader.lineContainsPlaceholder(line, "RESOURCE_CAMEL_CAP_PLURAL"))
+			if (TemplateLoader.containsPlaceholder(line, "RESOURCE_CAMEL_CAP_PLURAL"))
 				lines.add(TemplateLoader.replacePlaceholder(line, "RESOURCE_CAMEL_CAP_PLURAL", spec.getResourceCamelPlural(true)));
 			else lines.add(line);
 		}

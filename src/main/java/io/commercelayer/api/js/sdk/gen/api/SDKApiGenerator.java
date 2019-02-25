@@ -71,7 +71,7 @@ public class SDKApiGenerator extends SDKFileGenerator {
 				if (!line.isEmpty()) {
 					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_PLURAL", resFunctions.getResourceCamelPlural(true));
 					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_CAMEL_CAP_SINGULAR", resFunctions.getResourceCamelSingular(true));
-					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_SINGULAR", resFunctions.getResourceSnakeSingular(false));
+					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_SNAKE_SINGULAR", resFunctions.getResourceSnakeSingular());
 					filled = TemplateLoader.replacePlaceholder(filled, "RESOURCE_PATH", resFunctions.getPath());
 				}
 				lines.add("\t" + filled);
