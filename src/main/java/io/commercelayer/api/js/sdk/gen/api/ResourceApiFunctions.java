@@ -4,11 +4,19 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.commercelayer.api.codegen.service.generator.ServiceOperation;
 import io.commercelayer.api.js.sdk.gen.common.ResourceAware;
 
 public class ResourceApiFunctions extends ResourceAware {
 
-	private static final String[] ALL_FUNCTIONS = { "list", "all", "retrieve", "create", "update", "delete" };
+	private static final String[] ALL_FUNCTIONS = {
+		ServiceOperation.list.name(),
+		ServiceOperation.retrieve.name(),
+		ServiceOperation.create.name(),
+		ServiceOperation.update.name(),
+		ServiceOperation.delete.name(),
+		"all"
+	};
 
 	private String path;
 	private List<String> functions = new LinkedList<>();
