@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import io.commercelayer.api.js.sdk.gen.common.ResourceAware;
-import io.commercelayer.api.util.CLInflector;
 
 public class ResourceModelClass extends ResourceAware {
 	
@@ -14,7 +13,7 @@ public class ResourceModelClass extends ResourceAware {
 
 	
 	public ResourceModelClass(String type) {
-		super(CLInflector.getInstance().singularize(type));
+		super(type);
 		this.type = type;
 	}
 	

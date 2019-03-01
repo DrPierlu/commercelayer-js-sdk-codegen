@@ -35,7 +35,7 @@ public class SDKSpecGenerator extends SDKFileGenerator {
 	@Override
 	public JSCodeFile generate(ApiSchema schema) throws CodegenException {
 
-		logger.info("Javascript API test spec generation ...");
+		logger.info("Javascript API test spec generation [{}] ...", this.resSpec.getResource());
 		
 		String jsSpecFilePath = this.params.getJsSourceDir();
 		if (!jsSpecFilePath.endsWith("/")) jsSpecFilePath = jsSpecFilePath.concat("/");
@@ -48,7 +48,7 @@ public class SDKSpecGenerator extends SDKFileGenerator {
 		JSCodeFile jsSpecFile = new JSCodeFile(jsSpecFilePath);
 		jsSpecFile.addSourceLines(buildTestSpec(this.resSpec));
 
-		logger.info("Javascript API test spec generated.");
+		logger.info("Javascript API test spec generated [{}].", this.resSpec.getResource());
 
 		return jsSpecFile;
 

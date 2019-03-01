@@ -23,8 +23,11 @@ public class SDKTestGenerator {
 		List<ResourceTestSpec> specs = defineTestSpecs(schema);
 		
 		List<JSCodeFile> jsFiles = new ArrayList<>();
+		
 		for (ResourceTestSpec spec : specs)
 			jsFiles.add(new SDKSpecGenerator(spec).generate());
+		
+		jsFiles.add(new SDKTestPermissionsGenerator().generate(schema));
 
 		logger.info("Javascript API tests generated.");
 
