@@ -31,6 +31,7 @@ public class SDKGeneratorCli {
 		}
 		
 		new SDKGenerator().generate(api, model, test);
+		
 	}
 
 }
