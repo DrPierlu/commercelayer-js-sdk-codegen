@@ -66,7 +66,7 @@ public class SDKTestPermissionsGenerator extends SDKFileGenerator {
 		
 		lineSb.append('\t');
 		lineSb.append(rtp.getResourceCamelPlural(true));
-		lineSb.append(" = [");
+		lineSb.append(" : [");
 		
 		Iterator<ServiceOperation> soIter = rtp.getPermissions().iterator();
 		do {

@@ -4,8 +4,10 @@ if (data.@RESOURCE_CAMEL_CAP_PLURAL@ && data.@RESOURCE_CAMEL_CAP_PLURAL@.create)
     it("create", function() {
         return commercelayer.create@RESOURCE_CAMEL_CAP_SINGULAR@(new commercelayer.model.@RESOURCE_CAMEL_CAP_SINGULAR@().setFields(data.@RESOURCE_CAMEL_CAP_PLURAL@.create))
             .then(response => {
-                expect(response.get('id')).not.toBeNull();                
+                const id = response.get('id');
+				console.log('Created @RESOURCE_CAMEL_CAP_SINGULAR@ with id ' + id)
+				expect(id).not.toBeNull();
             })
     });
-else console.log('Test @RESOURCE_CAMEL_CAP_PLURAL@.create skipped: missing required test data')
-else console.log('Test @RESOURCE_CAMEL_CAP_PLURAL@.create skipped: missing required resource permission')
+else utils.missingRequiredData(SPEC_NAME, 'create')
+else utils.missingRequiredPermission(SPEC_NAME, 'create')
